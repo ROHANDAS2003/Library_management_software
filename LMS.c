@@ -110,3 +110,43 @@ void bookList(){
     
     fclose(fp);
 }
+
+void dele(){
+    int id, f=0;
+
+    system("CLS");
+    printf("<=== Remove book ===>\n\n");
+    printf("Enter the book id to remove:  ");
+    scanf("%d", &id);
+
+    FILE *ft;
+
+    fp = fopen("book.txt", "rb");
+    ft = fopen("temp.txt", "wb");
+
+    while (fread(&b, sizeof(b), 1, fp) == 1)
+    {
+        printf("%d %s", b.id, b.bookName);
+        if (id == b.id)
+        {
+            f=1;
+        }
+        else{
+            fwrite(&b, sizeof(b), 1, ft);
+        }
+    }
+
+    if (f==1)
+    {
+        printf("\n\n Deleted Successfully.");
+    }
+    else{
+        printf("\n\nRecord not found.");
+    }
+    
+    fclose(fp);
+    fclose(ft);
+
+    remove("book.txt");
+    rename("temp.txt", "book.txt");
+}
