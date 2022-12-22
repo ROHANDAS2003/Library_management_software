@@ -95,3 +95,18 @@ void addBook(){
     fwrite(&b, sizeof(b), 1, fp);
     fclose(fp);
 }
+
+void bookList(){
+
+    system("CLS");
+    printf("<=== Available books ===>\n\n");
+    printf("%-10s %-30s %-20s %s\n\n", "Book id", "Book name", "Author name", "Date");
+
+    fp = fopen("book.txt", "rb");
+    while (fread(&b, sizeof(b), 1, fp) == 1)
+    {
+        printf("%-10d %-30s %-20s %s\n\n", b.id, b.bookName, b.authorName, b.date);
+    }
+    
+    fclose(fp);
+}
