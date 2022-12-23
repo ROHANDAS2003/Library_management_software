@@ -104,6 +104,59 @@ void dele(){
     remove("book.txt");
     rename("temp.txt", "book.txt");
 }
+
+void issueBook(){
+    char myDate[12];
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(myDate, "%02d/%02d/%02d", tm.tm_mday, tm.tm_mon+1, tm.tm_year + 1900);
+    strcpy(s.date, myDate);
+
+    int f = 0;
+
+    system("CLS");
+    printf("<=== Issue Book ===>\n\n");
+
+    printf("Enter the book id to issue:  ");
+    scanf("%d", &s.id);
+
+    fp = fopen("book.txt", "rb");
+
+    while (fread(&b, sizeof(b), 1, fp) == 1)
+    {
+        if(b.id == s.id){
+            strcpy(s.bookName, b.bookName);
+            f = 1;
+            break;
+        }
+    }
+
+    if (f == 0)
+    {
+        printf("No book found with this id\n");
+        printf("Please try again...\n\n");
+        return;
+    }
+    
+    fp = fopen("issue.txt", "ab");
+
+    printf("Enter the student name:  ");
+    fflush(stdin);
+    gets(s.sName);
+
+    printf("Enter the student class:  ");
+    fflush(stdin);
+    gets(s.sClass);
+
+    printf("Enter Student Roll:  ");
+    scanf("%d", &s.sRoll);
+
+    printf("Book Issued successfully\n\n");
+
+    fwrite(&s, sizeof(s), 1, fp);
+    fclose(fp);
+}
+
 int main(){
     int ch;
 
