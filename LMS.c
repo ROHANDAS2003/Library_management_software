@@ -23,6 +23,87 @@ struct student
 
 FILE *fp;
 
+void addBook(){
+    char myDate[12];
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    sprintf(myDate, "%02d/%02d/%02d", tm.tm_mday, tm.tm_mon+1, tm.tm_year + 1900);
+    strcpy(b.date, myDate);
+
+    fp = fopen("book.txt", "ab");
+
+    printf("Enter the book id:  ");
+    scanf("%d", &b.id);
+
+    printf("Enter the book name:  ");
+    fflush(stdin);
+    gets(b.bookName);
+
+    printf("Enter author's name:  ");
+    fflush(stdin);
+    gets(b.authorName);
+
+    printf("Book added successfully\n\n");
+
+    fwrite(&b, sizeof(b), 1, fp);
+    fclose(fp);
+}
+
+void bookList(){
+
+    system("CLS");
+    printf("<=== Available books ===>\n\n");
+    printf("%-10s %-30s %-20s %s\n\n", "Book id", "Book name", "Author name", "Date");
+
+    fp = fopen("book.txt", "rb");
+    while (fread(&b, sizeof(b), 1, fp) == 1)
+    {
+        printf("%-10d %-30s %-20s %s\n\n", b.id, b.bookName, b.authorName, b.date);
+    }
+    
+    printf("\n");
+
+    fclose(fp);
+}
+
+void dele(){
+    int id, f=0;
+
+    system("CLS");
+    printf("<=== Remove book ===>\n\n");
+    printf("Enter the book id to remove:  ");
+    scanf("%d", &id);
+
+    FILE *ft;
+
+    fp = fopen("book.txt", "rb");
+    ft = fopen("temp.txt", "wb");
+
+    while (fread(&b, sizeof(b), 1, fp) == 1)
+    {
+        if (id == b.id)
+        {
+            f=1;
+        }
+        else{
+            fwrite(&b, sizeof(b), 1, ft);
+        }
+    }
+
+    if (f==1)
+    {
+        printf("\n\n Deleted Successfully.\n\n");
+    }
+    else{
+        printf("\n\nRecord not found.\n\n");
+    }
+    
+    fclose(fp);
+    fclose(ft);
+
+    remove("book.txt");
+    rename("temp.txt", "book.txt");
+}
 int main(){
     int ch;
 
@@ -31,7 +112,7 @@ int main(){
         system("CLS");
         printf("<=== Library Management system ===>\n\n");
         printf("Choose what you wanna do.\n");
-        printf("1. Add book \n 2. Book list \n 3. Remove book \n 4. Issue book \n 5. Issued book list \n 6. Exit software. \n  : ");
+        printf(" 1. Add book \n 2. Book list \n 3. Remove book \n 4. Issue book \n 5. Issued book list \n 6. Exit software. \n  : ");
         scanf("%d", &ch);
 
         switch (ch)
@@ -68,85 +149,4 @@ int main(){
     }
 
     return 0;    
-}
-
-void addBook(){
-    char myDate[12];
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-    sprintf(myDate, "%02d/%02d/%02d", tm.tm_mday, tm.tm_mon+1, tm.tm_year + 1900);
-    strcpy(b.date, myDate);
-
-    fp = fopen("book.txt", "ab");
-
-    printf("Enter the book id:  ");
-    scanf("%d", &b.id);
-
-    printf("Enter the book name:  ");
-    fflush(stdin);
-    gets(b.bookName);
-
-    printf("Enter author's name:  ");
-    fflush(stdin);
-    gets(b.authorName);
-
-    printf("Book added successfully");
-
-    fwrite(&b, sizeof(b), 1, fp);
-    fclose(fp);
-}
-
-void bookList(){
-
-    system("CLS");
-    printf("<=== Available books ===>\n\n");
-    printf("%-10s %-30s %-20s %s\n\n", "Book id", "Book name", "Author name", "Date");
-
-    fp = fopen("book.txt", "rb");
-    while (fread(&b, sizeof(b), 1, fp) == 1)
-    {
-        printf("%-10d %-30s %-20s %s\n\n", b.id, b.bookName, b.authorName, b.date);
-    }
-    
-    fclose(fp);
-}
-
-void dele(){
-    int id, f=0;
-
-    system("CLS");
-    printf("<=== Remove book ===>\n\n");
-    printf("Enter the book id to remove:  ");
-    scanf("%d", &id);
-
-    FILE *ft;
-
-    fp = fopen("book.txt", "rb");
-    ft = fopen("temp.txt", "wb");
-
-    while (fread(&b, sizeof(b), 1, fp) == 1)
-    {
-        printf("%d %s", b.id, b.bookName);
-        if (id == b.id)
-        {
-            f=1;
-        }
-        else{
-            fwrite(&b, sizeof(b), 1, ft);
-        }
-    }
-
-    if (f==1)
-    {
-        printf("\n\n Deleted Successfully.");
-    }
-    else{
-        printf("\n\nRecord not found.");
-    }
-    
-    fclose(fp);
-    fclose(ft);
-
-    remove("book.txt");
-    rename("temp.txt", "book.txt");
 }
