@@ -7,6 +7,42 @@
 #include <conio.h>
 
 void create_account()
+{
+    FILE *outfile;
+
+    struct person inp[50];
+    int i = 0;
+
+    // open file for writing
+    outfile = fopen("account.txt", "a");
+    if (outfile == NULL)
+    {
+        fprintf(stderr, "\n\n\n\t\t\t\tError opening file\n");
+        exit(1);
+    }
+
+    printf("\n\n\n\t\t\t\tUsername:");
+    scanf("%s", inp[i].username);
+
+    printf("\n\t\t\t\tPassword:");
+    scanf("%s", inp[i].password);
+
+    inp[i].status = 1;
+    // write struct to file
+
+    fwrite(&(inp[i]), sizeof(struct person), 1, outfile);
+    if (fwrite != 0)
+        printf("\n\t\t\t\tcontents to file written successfully !\n");
+    else
+        printf("\n\t\t\t\terror writing file !\n");
+
+    fclose(outfile);
+
+    i = i + 1;
+    getch();
+    system("cls");
+}
+
 void delete_account()
 void acc_login()
 void acc_menu()
