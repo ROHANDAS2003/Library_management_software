@@ -6,6 +6,20 @@
 #include <string.h>
 #include <conio.h>
 
+void add_books();
+void search_books();
+void delete_books();
+void view_books();
+void edit_books();
+void delete_account();
+void return_books();
+void issue_books();
+void view_issue();
+void search_menu();
+void search_author();
+void search_category();
+void create_account();
+
 int IsLeapYear(int year)
 {
     return (((year % 4 == 0) &&
@@ -49,6 +63,34 @@ int isValidDate(Date *validDate)
 
     return 1;
 }
+
+struct books
+{
+    int books_id;        // declare the integer data type
+    char bookName[50];   // declare the character data type
+    char authorName[50]; // declare the character data type
+    int total_copy;
+    int available;
+    int book_status; // 1=active 0=inactive
+    char category[30];
+    int edition;
+};
+
+struct books_issue
+{
+    int books_id;       // declare the integer data type
+    char studentID[50]; // declare the character data type
+    Date Issue_date;
+    Date return_date;
+};
+
+struct person
+{
+    char username[MAX_SIZE_USER_NAME];
+    char password[MAX_SIZE_PASSWORD];
+    int type_account;
+    int status;
+};
 
 void headMessage(const char *message)
 {
