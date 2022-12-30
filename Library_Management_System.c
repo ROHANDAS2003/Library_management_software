@@ -578,6 +578,55 @@ void search_author()
     system("cls");
 }
 
+void search_category()
+{
+    headMessage("SEARCH BOOKS");
+    FILE *infile;
+    struct books Book;
+    char userbook[50];
+    int check_book;
+    char temp;
+    if (infile == NULL)
+    {
+        fprintf(stderr, "\n\n\n\t\t\t\tError opening file\n");
+        exit(1);
+    }
+
+    printf("\n\n\n\t\t\t\tEnter category for searching: ");
+    scanf("%c", &temp);
+    scanf("%[^\n]", userbook);
+    // scanf("%s",userbook);
+
+    // Open person.dat for reading
+    infile = fopen("book.txt", "r");
+    int found = 0;
+    while (fread(&Book, sizeof(struct books), 1, infile))
+    {
+        // check_book = strcmpi(userbook,Book.bookName);
+        check_book = strstr(Book.category, userbook);
+        if (Book.book_status)
+        {
+            if (check_book != NULL)
+            {
+                printf("\n\n\n\t\t\t\t Book Found !");
+                printf("\n\n\t\t\t\tBook ID = %d ", Book.books_id);
+                printf("\n\t\t\t\tBook Name = %s ", Book.bookName);
+                printf("\n\t\t\t\tAuthor Name = %s ", Book.authorName);
+                printf("\n\t\t\t\tCategory = %s ", Book.category);
+                printf("\n\t\t\t\tEdition = %d ", Book.edition);
+                printf("\n\t\t\t\tTotal copies = %d ", Book.total_copy);
+                printf("\n\t\t\t\tAvailable Copies = %d ", Book.available);
+                found = 1;
+            }
+        }
+    }
+    fclose(infile);
+    if (!found)
+        printf("\n\n\t\t\t\tBook Not Found");
+    getch();
+    system("cls");
+}
+
 int main()
 {
     acc_menu();
