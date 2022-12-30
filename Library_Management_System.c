@@ -6,6 +6,21 @@
 #include <string.h>
 #include <conio.h>
 
+int IsLeapYear(int year)
+{
+    return (((year % 4 == 0) &&
+             (year % 100 != 0)) ||
+            (year % 400 == 0));
+}
+typedef struct
+{
+    int yyyy;
+    int mm;
+    int dd;
+} Date;
+
+Date duedate;
+
 void create_account()
 {
     FILE *outfile;
