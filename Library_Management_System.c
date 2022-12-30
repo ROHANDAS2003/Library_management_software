@@ -834,6 +834,90 @@ void issue_books()
     getch();
 }
 
+void return_books()
+{
+    headMessage("RETURN BOOK");
+    struct books Book[50];
+    struct books_issue issue[50];
+    struct books out_Book[50];
+    struct books_issue out_issue[50];
+    FILE *booksfile, *issuefile, *out_booksfile, *out_issuefile;
+    int check_book, check_issue1, check_issue2;
+    int i = 0;
+    int k = 0;
+    int status;
+    int book_id, j;
+    char student_id[50];
+    int found = 0;
+    issuefile = fopen("issue.txt", "r+");
+    printf("\n\n\n\t\t\t\tEnter Student ID: ");
+    scanf("%s", student_id);
+    printf("\t\t\t\tEnter Book ID  (Integers Only): ");
+    scanf("%d", &book_id);
+
+    while (fread(&(issue[i]), sizeof(struct books_issue), 1, issuefile))
+    {
+        out_issue[i] = issue[i];
+        check_issue1 = strcmpi(student_id, issue[i].studentID);
+        check_issue2 = book_id - issue[i].books_id;
+        if ((!check_issue1) && (!check_issue2) && (!out_issue[i].return_date.dd))
+        {
+            found = 1;
+            do
+            {
+                printf("\n\t\t\t\tReturn Date(dd/mm/yyyy)  = ");
+                scanf("%d/%d/%d", &out_issue[i].return_date.dd, &out_issue[i].return_date.mm, &out_issue[i].return_date.yyyy);
+                status = isValidDate(&out_issue[i].return_date);
+                if (!status)
+                {
+                    printf("\n\t\t\tPlease enter a valid date.\n");
+                }
+            } while (!status);
+            printf("\t\t\t\tDue Date(dd/mm/yyyy)  = %d/%d/%d", duedate.dd, duedate.mm, duedate.yyyy);
+            if (out_issue[i].return_date.dd == duedate.dd)
+                printf("\n\n\t\t\t\tReturned on time!");
+            if (out_issue[i].return_date.dd != duedate.dd)
+                printf("\n\n\t\t\t\tPassed the due date!");
+
+            // fseek(issuefile,i*sizeof(struct books_issue),SEEK_SET);
+            // fwrite(&issue,sizeof(struct books_issue),1,issuefile);
+
+            booksfile = fopen("book.txt", "r+");
+            j = 0;
+            while (fread(&(Book[j]), sizeof(struct books), 1, booksfile))
+            {
+                out_Book[j] = Book[j];
+                check_book = book_id - Book[j].books_id;
+
+                if (!check_book)
+                {
+                    out_Book[j].available++;
+                    // fseek(booksfile,j*sizeof(struct books),SEEK_SET);
+                    // fwrite(&Book,sizeof(struct books),1,booksfile);
+                }
+                j++;
+            }
+            fclose(booksfile);
+        }
+        i++;
+        k++;
+    }
+    fclose(issuefile);
+    if (found)
+    {
+        out_booksfile = fopen("book.txt", "w+");
+        fwrite(&out_Book, sizeof(struct books), j, out_booksfile);
+        fclose(out_booksfile);
+
+        out_issuefile = fopen("issue.txt", "w+");
+        fwrite(&out_issue, sizeof(struct books_issue), i, out_issuefile);
+        fclose(out_issuefile);
+    }
+    else
+        printf("\n\n\t\t\t\tBook Not Issued to Student");
+    getch();
+}
+
 int main()
 {
     acc_menu();
