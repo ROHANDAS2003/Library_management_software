@@ -156,6 +156,64 @@ void delete_account()
     system("cls");
 }
 
+void menu_librarian()
+{
+    int choice = 0;
+    do
+    {
+        headMessage("LIBRARIAN MAIN MENU");
+        printf("\n\n\n\t\t\t1.Add Book");
+        printf("\n\t\t\t2.Search Book");
+        printf("\n\t\t\t3.View Books");
+        printf("\n\t\t\t4.Edit Book");
+        printf("\n\t\t\t5.Delete Book");
+        printf("\n\t\t\t6.Issue Book");
+        printf("\n\t\t\t7.Return Book");
+        printf("\n\t\t\t8.View Issued Books");
+        printf("\n\t\t\t0.Exit");
+        printf("\n\n\n\t\t\tEnter choice => ");
+
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1:
+            add_books();
+            break;
+        case 2:
+            search_menu();
+            break;
+        case 3:
+            view_books();
+            break;
+        case 4:
+            edit_books();
+            break;
+        case 5:
+            delete_books();
+            break;
+        case 6:
+            issue_books();
+            break;
+        case 7:
+            return_books();
+            break;
+        case 8:
+            view_issue();
+            break;
+        case 0:
+            printf("\n\n\n\t\t\t\tThank you!!!\n\n\n\n\n");
+            // exit(1);
+            getch();
+            continue;
+            break;
+        default:
+            printf("\n\n\n\t\t\tINVALID INPUT!!! Try again...");
+            getch();
+        }                  // Switch Ended
+    } while (choice != 0); // Loop Ended
+    getch();
+}
+
 void acc_login()
 {
     FILE *infile;
