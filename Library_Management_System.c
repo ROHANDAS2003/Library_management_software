@@ -675,6 +675,132 @@ void search_category()
     system("cls");
 }
 
+void issue_books()
+{
+    headMessage("ISSUE BOOK");
+    struct books Book[50];
+    struct books out[50];
+    struct books_issue issue;
+    FILE *booksfile, *issuefile, *outfile;
+    int check_book;
+    int i = 0;
+    char temp;
+    char userbook[50];
+    booksfile = fopen("book.txt", "r+");
+    printf("\n\n\n\t\t\t\tEnter Book Name for Issuing: ");
+    // scanf("%s",userbook);
+    scanf("%c", &temp);
+    scanf("%[^\n]", userbook);
+    int found = 0;
+    int status;
+    int j = 0;
+    while (fread(&(Book[i]), sizeof(struct books), 1, booksfile))
+    {
+        check_book = strcmpi(userbook, Book[i].bookName);
+        out[i] = Book[i];
+        if (Book[i].book_status && (Book[i].available > 0) && (!check_book) && (!found))
+        {
+            found = 1;
+            out[i].available--;
+            // Book.available--;
+            // fseek(booksfile,i*sizeof(struct books),SEEK_SET);
+            // fwrite(&Book,sizeof(struct books),1,booksfile);
+
+            issuefile = fopen("issue.txt", "a+");
+            issue.books_id = Book[i].books_id;
+            j++;
+            printf("\n\t\t\t\tStudent ID  = ");
+            scanf("%s", issue.studentID);
+            do
+            {
+                printf("\t\t\t\tIssue Date(dd/mm/yyyy)  = ");
+                scanf("%d/%d/%d", &issue.Issue_date.dd, &issue.Issue_date.mm, &issue.Issue_date.yyyy);
+                status = isValidDate(&issue.Issue_date);
+                if (!status)
+                {
+                    printf("\n\t\t\tPlease enter a valid date.\n");
+                }
+            } while (!status);
+            issue.return_date.dd = 0;
+            issue.return_date.mm = 0;
+            issue.return_date.yyyy = 0;
+
+            if ((issue.Issue_date.mm == 1) || (issue.Issue_date.mm == 3) || (issue.Issue_date.mm == 5) || (issue.Issue_date.mm == 7) || (issue.Issue_date.mm == 8) || (issue.Issue_date.mm == 10) || (issue.Issue_date.mm == 12))
+            {
+                if (issue.Issue_date.dd + 20 >= 32)
+                {
+                    if (issue.Issue_date.mm == 12)
+                    {
+                        duedate.dd = 20 - (31 - (issue.Issue_date.dd));
+                        duedate.mm = 1;
+                        duedate.yyyy = issue.Issue_date.yyyy + 1;
+                    }
+                    else
+                    {
+                        duedate.dd = 20 - (31 - (issue.Issue_date.dd));
+                        duedate.mm = issue.Issue_date.mm + 1;
+                        duedate.yyyy = issue.Issue_date.yyyy;
+                    }
+                }
+                if (((issue.Issue_date.dd + 20) < 32))
+                {
+                    duedate.dd = issue.Issue_date.dd + 20;
+                    duedate.mm = issue.Issue_date.mm;
+                    duedate.yyyy = issue.Issue_date.yyyy;
+                }
+            }
+            if ((issue.Issue_date.mm == 4) || (issue.Issue_date.mm == 6) || (issue.Issue_date.mm == 9) || (issue.Issue_date.mm == 11))
+            {
+                if ((issue.Issue_date.dd + 20) < 31)
+                {
+                    duedate.dd = issue.Issue_date.dd + 20;
+                    duedate.mm = issue.Issue_date.mm;
+                    duedate.yyyy = issue.Issue_date.yyyy;
+                }
+                if ((issue.Issue_date.dd + 20) >= 31)
+                {
+                    duedate.dd = 20 - (30 - (issue.Issue_date.dd));
+                    duedate.mm = issue.Issue_date.mm + 1;
+                    duedate.yyyy = issue.Issue_date.yyyy;
+                }
+            }
+            if (issue.Issue_date.mm == 2)
+            {
+                if ((issue.Issue_date.dd + 20) < 29)
+                {
+                    duedate.dd = issue.Issue_date.dd + 20;
+                    duedate.mm = issue.Issue_date.mm;
+                    duedate.yyyy = issue.Issue_date.yyyy;
+                }
+                if ((issue.Issue_date.dd + 20) >= 29)
+                {
+                    duedate.dd = 20 - (28 - (issue.Issue_date.dd));
+                    duedate.mm = issue.Issue_date.mm + 1;
+                    duedate.yyyy = issue.Issue_date.yyyy;
+                }
+            }
+
+            printf("\t\t\t\tDue Date(dd/mm/yyyy)  = %d/%d/%d", duedate.dd, duedate.mm, duedate.yyyy);
+            getch();
+            fwrite(&issue, sizeof(struct books_issue), 1, issuefile);
+            fclose(issuefile);
+        }
+        i++;
+    }
+
+    fclose(booksfile);
+    if (found)
+    {
+        outfile = fopen("book.txt", "w+");
+        fwrite(&out, sizeof(struct books), i, outfile);
+        fclose(outfile);
+    }
+    else
+        printf("\n\n\t\t\t\tBook Not Found");
+
+    getch();
+}
+
 int main()
 {
     acc_menu();
