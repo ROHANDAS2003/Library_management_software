@@ -918,6 +918,113 @@ void return_books()
     getch();
 }
 
+void edit_books()
+{
+    headMessage("EDIT BOOK RECORD");
+    FILE *editfile;
+    struct books Book[50];
+    struct books out[50];
+    char userbook[50];
+    int check_book;
+    int i = 0;
+    char temp;
+    char temp_2;
+    if (editfile == NULL)
+    {
+        fprintf(stderr, "\n\n\n\t\t\t\tError opening file\n");
+        exit(1);
+    }
+
+    printf("\n\n\n\t\t\t\tEnter Book Name for Editing: ");
+    scanf("%c", &temp);
+    scanf("%[^\n]", userbook);
+    // scanf("%s",userbook);
+
+    // Open person.dat for reading
+    editfile = fopen("book.txt", "r+");
+    int flag = 1;
+    int found = 0;
+    int num;
+
+    while (fread(&(Book[i]), sizeof(struct books), 1, editfile))
+    {
+        out[i] = Book[i];
+        check_book = strcmpi(userbook, Book[i].bookName);
+        if ((Book[i].book_status) && (flag) && (!check_book))
+        {
+            found = 1;
+            printf("\n\t\t\t\tBook Found !");
+            printf("\n\n\t\t\t\tBook ID = %d ", Book[i].books_id);
+            printf("\n\t\t\t\tBook Name = %s ", Book[i].bookName);
+            printf("\n\t\t\t\tAuthor Name = %s ", Book[i].authorName);
+            printf("\n\t\t\t\tCategory = %s ", Book[i].category);
+            printf("\n\t\t\t\tEdition = %d ", Book[i].edition);
+            printf("\n\t\t\t\tTotal copies = %d ", Book[i].total_copy);
+            printf("\n\t\t\t\tAvailable Copies = %d ", Book[i].available);
+
+            int edit_choice;
+            while (flag)
+            {
+                printf("\n\n\t\t\t\t1.Update Category");
+                printf("\n\t\t\t\t2.Update Edition");
+                printf("\n\t\t\t\t3.Exit");
+                printf("\n\n\t\t\t\tEnter choice:");
+                scanf("%d", &edit_choice);
+
+                switch (edit_choice)
+                {
+                case 1:
+                    printf("\n\t\t\t\tEnter new category:  ");
+                    scanf("%c", &temp_2);
+                    scanf("%[^\n]", out[i].category);
+                    // fseek(editfile,i*sizeof(struct books),SEEK_SET);
+                    // fwrite(&(Book[i]),sizeof(struct books),1,editfile);
+                    break;
+                case 2:
+
+                    do
+                    {
+                        printf("\n\t\t\t\tEnter new edition  (Integers only) :  ");
+                        scanf("%d", &out[i].edition);
+                        num = (out[i].edition > 0) && (out[i].edition < 100);
+                        printf("\n%d", num);
+
+                        if (!num)
+                        {
+                            printf("\n\t\t\t\tEnter valid input");
+                            // scanf("%c",&temp);
+                            fflush(stdin);
+                        }
+                    } while (!num);
+                    printf("serial number: %d", i);
+                    // fseek(editfile,i*sizeof(struct books),SEEK_SET);
+                    // fwrite(&(Book[i]),sizeof(struct books),1,editfile);
+                    break;
+                case 3:
+                    flag = 0;
+
+                    break;
+                default:
+                    printf("\n\t\t\t\tEnter 1 /2 /3");
+                }
+            }
+        }
+        i++;
+    }
+
+    fclose(editfile);
+    if (found)
+    {
+        editfile = fopen("book.txt", "w+");
+        fwrite(&out, sizeof(struct books), i, editfile);
+        fclose(editfile);
+    }
+    else
+        printf("\n\n\t\t\t\tBook Not Found");
+    getch();
+    system("cls");
+}
+
 void delete_books()
 {
     headMessage("DELETE BOOK");
