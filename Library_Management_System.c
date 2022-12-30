@@ -44,6 +44,59 @@ void create_account()
 }
 
 void delete_account()
+{
+    FILE *infile;
+    struct person inp[50];
+    struct person out[50];
+    char username[30];
+    int check_user;
+    int i = 0;
+    if (infile == NULL)
+    {
+        fprintf(stderr, "\n\n\n\t\t\t\tError opening file\n");
+        exit(1);
+    }
+
+    printf("\n\n\n\t\t\t\tEnter Username for Closing account:  ");
+    scanf("%s", username);
+
+    // Open person.dat for reading
+    infile = fopen("account.txt", "r+");
+    int found = 0;
+
+    while (fread(&(inp[i]), sizeof(struct person), 1, infile))
+    {
+        out[i] = inp[i];
+        check_user = strcmpi(username, inp[i].username);
+        if (inp[i].status)
+        {
+            if (!check_user)
+            {
+                printf("\n\n\t\t\t\t User Found !");
+                found = 1;
+                printf("\n\t\t\t\tUser Name = %s \n", inp[i].username);
+                printf("\n\t\t\t\tType of Account = %d \n", inp[i].type_account);
+
+                out[i].status = 0;
+                // fseek(infile,i*sizeof(struct person),SEEK_SET);
+                // fwrite(&inp,sizeof(struct person),1,infile);
+                break;
+            }
+        }
+        i++;
+    }
+    fclose(infile);
+    if (!found)
+        printf("\n\n\t\t\t\tUser Not Found");
+    else
+    {
+        infile = fopen("account.txt", "w+");
+        fwrite(&out, sizeof(struct person), i, infile);
+    }
+    getch();
+    system("cls");
+}
+
 void acc_login()
 void acc_menu()
 {
