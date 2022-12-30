@@ -528,6 +528,39 @@ void view_books()
     system("cls");
 }
 
+void view_issue()
+{
+    headMessage("VIEW ISSUED BOOKS");
+    FILE *infile;
+    struct books_issue issue;
+
+    infile = fopen("issue.txt", "r");
+    int i = 1;
+    if (infile == NULL)
+    {
+        fprintf(stderr, "\n\n\n\t\t\t\tError opening file\n");
+        exit(1);
+    }
+
+    // fseek(infile,0,2);
+    // size=ftell(infile);
+    // printf("\n %d",size);
+    printf("\n\n");
+    while (fread(&issue, sizeof(struct books_issue), 1, infile))
+    {
+        printf("\n\t\t\tSerial no. %d", i);
+        printf("\n\t\t\t\tBook ID = %d ", issue.books_id);
+        printf("\n\t\t\t\tStudent ID = %s ", issue.studentID);
+
+        printf("\n\t\t\t\tIssued Date = %d/%d/%d ", issue.Issue_date.dd, issue.Issue_date.mm, issue.Issue_date.yyyy);
+        printf("\n\t\t\t\tReturn Date = %d/%d/%d ", issue.return_date.dd, issue.return_date.mm, issue.return_date.yyyy);
+        i++;
+        printf("\n");
+    }
+    fclose(infile);
+    getch();
+    system("cls");
+}
 void search_books()
 {
     headMessage("SEARCH BOOKS");
