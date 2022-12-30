@@ -67,6 +67,7 @@ void create_account()
 {
     FILE *outfile;
 
+    headMessage("Create Account");
     struct person inp[50];
     int i = 0;
 
@@ -102,6 +103,7 @@ void create_account()
 
 void delete_account()
 {
+    headMessage("CLOSE ACCOUNT");
     FILE *infile;
     struct person inp[50];
     struct person out[50];
@@ -161,6 +163,7 @@ void acc_login()
     char login_password[20];
 
     int pass_check, user_check;
+    headMessage("ACCOUNT LOGIN");
     struct person inp[50];
     int c = 0, i = 0;
 
