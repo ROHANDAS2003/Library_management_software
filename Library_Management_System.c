@@ -918,6 +918,62 @@ void return_books()
     getch();
 }
 
+void delete_books()
+{
+    headMessage("DELETE BOOK");
+    FILE *infile;
+    struct books Book[50];
+    struct books out[50];
+    char userbook[50];
+    int check_book;
+    int i = 0;
+    char temp;
+    if (infile == NULL)
+    {
+        fprintf(stderr, "\n\n\n\t\t\t\tError opening file\n");
+        exit(1);
+    }
+
+    printf("\n\n\n\t\t\tEnter Book Name for Deleting: ");
+    // scanf("%s",userbook);
+    scanf("%c", &temp);
+    scanf("%[^\n]", userbook);
+
+    int found = 0;
+    // Open person.dat for reading
+    infile = fopen("book.txt", "r+");
+    while (fread(&(Book[i]), sizeof(struct books), 1, infile))
+    {
+        out[i] = Book[i];
+        check_book = strcmpi(userbook, Book[i].bookName);
+        if ((Book[i].book_status) && (!check_book))
+        {
+            printf("\n\n\t\t\t\tBook Found !");
+            found = 1;
+            printf("\n\n\t\t\t\tBook ID = %d ", Book[i].books_id);
+            printf("\n\t\t\t\tBook Name = %s ", Book[i].bookName);
+            printf("\n\t\t\t\tAuthor Name = %s ", Book[i].authorName);
+            printf("\n\t\t\t\tCategory = %s ", Book[i].category);
+            printf("\n\t\t\t\tEdition = %d ", Book[i].edition);
+            printf("\n\t\t\t\tTotal copies = %d ", Book[i].total_copy);
+            printf("\n\t\t\t\tAvailable Copies = %d ", Book[i].available);
+            out[i].book_status = 0;
+        }
+        i++;
+    }
+    fclose(infile);
+    if (found)
+    {
+        infile = fopen("book.txt", "w+");
+        fwrite(&out, sizeof(struct books), i, infile);
+        fclose(infile);
+    }
+    else
+        printf("\n\n\t\t\t\tBook Not Found");
+    getch();
+    system("cls");
+}
+
 int main()
 {
     acc_menu();
