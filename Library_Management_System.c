@@ -98,6 +98,54 @@ void delete_account()
 }
 
 void acc_login()
+{
+    FILE *infile;
+    char login_username[30];
+    char login_password[20];
+
+    int pass_check, user_check;
+    struct person inp[50];
+    int c = 0, i = 0;
+
+    infile = fopen("account.txt", "r");
+    if (infile == NULL)
+    {
+        fprintf(stderr, "\n\n\n\t\t\t\tError opening file\n");
+        exit(1);
+    }
+
+    printf("\n\n\n\t\t\t\tUsername:");
+    scanf("%s", login_username);
+
+    printf("\n\t\t\t\tPassword:");
+    scanf("%s", login_password);
+
+    while (fread(&(inp[i]), sizeof(struct person), 1, infile))
+    {
+        // printf("%s,%s",inp[i].username,inp[i].password);
+        user_check = strcmp(inp[i].username, login_username);
+        pass_check = strcmp(inp[i].password, login_password);
+        if ((!user_check) && (!pass_check) && (inp[i].status))
+        {
+            c = 1;
+            printf("\n\n\t\t\t\tLogin successful !");
+            time_t t; // not a primitive datatype
+            time(&t);
+            printf("\n\t\t\t\tYou are logging in at (date and time): %s", ctime(&t));
+            getch();
+            menu_librarian();
+        }
+        i++;
+    }
+
+    if (!c)
+    {
+        printf("\n\n\t\t\t\tLogin failed ,Retry !");
+        getch();
+    }
+    fclose(infile);
+}
+
 void acc_menu()
 {
     int choice = 0;
