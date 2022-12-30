@@ -362,6 +362,96 @@ void acc_menu()
     } while (choice != 0); // Loop Ended
 }
 
+void add_books()
+{
+    FILE *outfile;
+    int i = 0;
+    int num;
+    headMessage("ADD BOOKS: ");
+    struct books Book[50];
+    char temp;
+    // open file for writing
+    outfile = fopen("book.txt", "a");
+    if (outfile == NULL)
+    {
+        fprintf(stderr, "\nError opening file\n");
+        exit(1);
+    }
+    // fseek(outfile,i*sizeof(struct books),SEEK_SET);
+    do
+    {
+        printf("\n\n\n\t\t\t\tBook ID NO  (Integers Only)  = ");
+        scanf("%d", &(Book[i]).books_id);
+        num = (Book[i].books_id > 0) && (Book[i].books_id < 100001);
+        // printf("\n%d",num);
+
+        if (!num)
+        {
+            printf("\n\t\t\t\tEnter valid input");
+            // scanf("%c",&temp);
+            fflush(stdin);
+        }
+    } while (!num);
+
+    printf("\t\t\t\tBook Name  = ");
+    scanf("%c", &temp);
+    scanf("%[^\n]", Book[i].bookName);
+    // scanf("%s",Book[i].bookName);
+
+    printf("\t\t\t\tAuthor Name  = ");
+    scanf("%c", &temp);
+    scanf("%[^\n]", Book[i].authorName);
+
+    do
+    {
+        printf("\t\t\t\tTotal number of copies  (Integers Only) = ");
+        scanf("%d", &(Book[i]).total_copy);
+        num = (Book[i].total_copy > 0) && (Book[i].total_copy < 101);
+        printf("\n%d", num);
+
+        if (!num)
+        {
+            printf("\n\t\t\t\tEnter valid input");
+            // scanf("%c",&temp);
+            fflush(stdin);
+        }
+    } while (!num);
+
+    Book[i].available = Book[i].total_copy;
+    Book[i].book_status = 1;
+
+    printf("\t\t\t\tCategory  = ");
+    scanf("%c", &temp);
+    scanf("%[^\n]", Book[i].category);
+
+    do
+    {
+        printf("\t\t\t\tEdition  (Integers Only) = ");
+        scanf("%d", &(Book[i]).edition);
+        num = (Book[i].edition > 0) && (Book[i].edition < 100);
+        printf("\n%d", num);
+
+        if (!num)
+        {
+            printf("\n\t\t\t\tEnter valid input");
+            // scanf("%c",&temp);
+            fflush(stdin);
+        }
+    } while (!num);
+
+    // write structures to file
+    fwrite(&(Book[i]), sizeof(struct books), 1, outfile);
+
+    if (fwrite != 0)
+        printf("\n\t\t\t\tcontents to file written successfully !\n");
+    else
+        printf("\n\t\t\t\terror writing file !\n");
+    fclose(outfile);
+    i++;
+    getch();
+    system("cls");
+}
+
 int main()
 {
     acc_menu();
