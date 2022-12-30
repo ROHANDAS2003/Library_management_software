@@ -362,6 +362,42 @@ void acc_menu()
     } while (choice != 0); // Loop Ended
 }
 
+void search_menu()
+{
+    int choice = 0;
+    do
+    {
+        headMessage("SEARCH BOOKS MENU");
+        printf("\n\n\n\t\t\t1.Search by Book Name");
+        printf("\n\t\t\t2.Search by Author Name");
+        printf("\n\t\t\t3.Search by Category");
+        printf("\n\t\t\t0.Back to Main Menu");
+        printf("\n\n\n\t\t\tEnter choice => ");
+
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1:
+            search_books();
+            break;
+        case 2:
+            search_author();
+            break;
+        case 3:
+            search_category();
+            break;
+        case 0:
+            printf("\n\n\n\t\t\t\tThank you!!!\n");
+            getch();
+            continue;
+            break;
+        default:
+            printf("\n\n\n\t\t\tINVALID INPUT!!! Try again...");
+            getch();
+        }                  // Switch Ended
+    } while (choice != 0); // Loop Ended
+}
+
 void add_books()
 {
     FILE *outfile;
