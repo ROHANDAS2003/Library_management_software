@@ -452,6 +452,46 @@ void add_books()
     system("cls");
 }
 
+void view_books()
+{
+    headMessage("VIEW BOOKS");
+    FILE *infile;
+    struct books Book;
+
+    infile = fopen("book.txt", "r");
+
+    int i = 1;
+    if (infile == NULL)
+    {
+        fprintf(stderr, "\n\n\n\t\t\tError opening file\n");
+        exit(1);
+    }
+
+    // fseek(infile,0,2);
+    // size=ftell(infile);
+    // printf("\n %d",size);
+    printf("\n\n");
+    while (fread(&Book, sizeof(struct books), 1, infile))
+    {
+        if (Book.book_status)
+        {
+            printf("\n\t\t\tSerial no. %d", i);
+            printf("\n\t\t\t\tBook ID = %d ", Book.books_id);
+            printf("\n\t\t\t\tBook Name = %s ", Book.bookName);
+            printf("\n\t\t\t\tAuthor Name = %s ", Book.authorName);
+            printf("\n\t\t\t\tCategory = %s ", Book.category);
+            printf("\n\t\t\t\tEdition = %d ", Book.edition);
+            printf("\n\t\t\t\tTotal copies = %d ", Book.total_copy);
+            printf("\n\t\t\t\tAvailable Copies = %d ", Book.available);
+            printf("\n");
+            i++;
+        }
+    }
+    fclose(infile);
+    getch();
+    system("cls");
+}
+
 int main()
 {
     acc_menu();
